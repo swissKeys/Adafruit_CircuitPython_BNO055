@@ -241,13 +241,27 @@ class BNO055:  # pylint: disable=too-many-public-methods
     def _reset(self) -> None:
         print(self._rst_pin)
         """Resets the sensor to default settings."""
-        self.mode = CONFIG_MODE
-        try:
-            self._write_register(_TRIGGER_REGISTER, 0x20)
-        except OSError:  # error due to the chip resetting
-            pass
-        # wait for the chip to reset (650 ms typ.)
-        time.sleep(0.7)
+
+        if self._rst_pin is not None:
+            import Adafruit_GPIO as GPIO
+            gpio = GPIO.get_platform_gpio()
+            gpio.setup(self._rst, GPIO.OUT)
+            gpio.set_high(self._rst)            # If an rst pin is provided, set it low for a short time to trigger reset
+            self._gpio.setup(self._rst_pin, GPIO.OUT)
+            self._gpio.set_low(self._rst_pin)
+            time.sleep(0.65)
+            self._gpio.set_high(self._rst_pin)  # Set it high again
+        else:
+            # If no rst pin is provided, use the default reset method
+            self.mode = CONFIG_MODE
+            try:
+                self._write_register(_TRIGGER_REGISTER, 0x20)
+            except OSError:  # error due to the chip resetting
+                pass
+            # wait for the chip to reset (650 ms typ.)
+            time.sleep(0.7)
+
+
 
     @property
     def mode(self) -> int:
