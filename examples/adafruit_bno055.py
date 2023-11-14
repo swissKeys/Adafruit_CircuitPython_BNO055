@@ -221,7 +221,6 @@ class BNO055:  # pylint: disable=too-many-public-methods
     """
 
     def __init__(self) -> None:
-        print(hello)
         chip_id = self._read_register(_ID_REGISTER)
         print(chip_id)
         print(_CHIP_ID)
