@@ -814,10 +814,12 @@ class BNO055_UART(BNO055):
     Driver for the BNO055 9DOF IMU sensor via UART.
     """
 
-    def __init__(self, uart: UART) -> None:
+    def __init__(self, uart: UART, rst_pin=None) -> None:
         self._uart = uart
+        self._rst_pin = rst_pin  # Pass the rst_pin argument to the instance
+
         print(self._uart.baudrate)
-        super().__init__()
+        super().__init__(rst_pin=rst_pin)
 
     def _write_register(  # pylint: disable=arguments-differ,arguments-renamed
         self, register: int, data: int
