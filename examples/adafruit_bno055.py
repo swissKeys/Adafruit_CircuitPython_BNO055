@@ -224,7 +224,7 @@ class BNO055:  # pylint: disable=too-many-public-methods
 
         import Adafruit_GPIO as GPIO
         GPIO.get_platform_gpio().setup(18, GPIO.OUT)
-        GPIO.get_platform_gpio.set_high(18)
+        GPIO.get_platform_gpio().set_high(18)
         chip_id = self._read_register(_ID_REGISTER)
         print(chip_id)
         print(_CHIP_ID)
