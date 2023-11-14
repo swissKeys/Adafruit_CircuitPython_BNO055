@@ -222,9 +222,6 @@ class BNO055:  # pylint: disable=too-many-public-methods
 
     def __init__(self) -> None:
 
-        import Adafruit_GPIO as GPIO
-        GPIO.get_platform_gpio().setup(18, GPIO.OUT)
-        GPIO.get_platform_gpio().set_high(18)
         chip_id = self._read_register(_ID_REGISTER)
         print(chip_id)
         print(_CHIP_ID)
@@ -238,7 +235,7 @@ class BNO055:  # pylint: disable=too-many-public-methods
         self.gyro_range = GYRO_2000_DPS
         self.magnet_rate = MAGNET_20HZ
         time.sleep(0.01)
-        self.mode = NDOF_MODE
+        self.mode = MAGONLY_MODE
         time.sleep(0.01)
 
     def _reset(self) -> None:
