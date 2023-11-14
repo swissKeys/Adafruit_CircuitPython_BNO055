@@ -206,13 +206,12 @@ class BNO055:  # pylint: disable=too-many-public-methods
         self._write_register(_TRIGGER_REGISTER, 0x00)
         self.accel_range = ACCEL_4G
         self.gyro_range = GYRO_2000_DPS
-        self.magnet_rate = MAGNET_20HZ
+        self.magnet_rate = MAGNET_30HZ
         time.sleep(0.01)
         self.mode = MAGONLY_MODE
         time.sleep(0.01)
 
     def _reset(self) -> None:
-        self.mode = CONFIG_MODE
         print(self._rst_pin)
         """Resets the sensor to default settings."""
 
