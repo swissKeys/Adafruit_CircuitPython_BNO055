@@ -815,8 +815,6 @@ class BNO055_UART(BNO055):
     def __init__(self, uart: UART) -> None:
         self._uart = uart
         print(self._uart.baudrate)
-        print(self._uart.rst)
-        self._uart.baudrate = 115200
         super().__init__()
 
     def _write_register(  # pylint: disable=arguments-differ,arguments-renamed
