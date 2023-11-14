@@ -5,7 +5,7 @@ import time
 import serial
 
 # Define the serial connection
-uart = serial.Serial('/dev/ttyUSB0', 115200)  # Replace '/dev/ttyUSB0' with your specific port
+uart = serial.Serial('/dev/serial0', 115200)  # Replace '/dev/ttyUSB0' with your specific port
 
 # Create an instance of the BNO055 sensor using UART
 sensor = adafruit_bno055.BNO055_UART(uart)
