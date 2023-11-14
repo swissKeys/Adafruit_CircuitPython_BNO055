@@ -245,9 +245,9 @@ class BNO055:  # pylint: disable=too-many-public-methods
 
         if self._rst_pin is not None:
             import Adafruit_GPIO as GPIO
+            
             gpio = GPIO.get_platform_gpio()
-            gpio.setup(self._rst_pin, GPIO.OUT)
-            gpio.set_high(self._rst_pin)            # If an rst pin is provided, set it low for a short time to trigger reset
+            self._gpio = gpio           # If an rst pin is provided, set it low for a short time to trigger reset
             self._gpio.setup(self._rst_pin, GPIO.OUT)
             self._gpio.set_low(self._rst_pin)
             time.sleep(0.65)
