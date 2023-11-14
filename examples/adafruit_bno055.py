@@ -208,7 +208,7 @@ class BNO055:  # pylint: disable=too-many-public-methods
         self.gyro_range = GYRO_2000_DPS
         self.magnet_rate = MAGNET_30HZ
         time.sleep(0.01)
-        self.mode = MAGONLY_MODE
+        self.mode = NDOF_MODE
         time.sleep(0.01)
 
     def _reset(self) -> None:
@@ -348,6 +348,7 @@ class BNO055:  # pylint: disable=too-many-public-methods
 
     @mode.setter
     def mode(self, new_mode: int) -> None:
+        print("MODESETTER")
         self._write_register(_MODE_REGISTER, CONFIG_MODE)  # Empirically necessary
         time.sleep(0.02)  # Datasheet table 3.6
         if new_mode != CONFIG_MODE:
@@ -622,7 +623,7 @@ class BNO055:  # pylint: disable=too-many-public-methods
         return 0b00000111 & value
 
     @magnet_rate.setter
-    def magnet_rate(self, rate: int = MAGNET_20HZ) -> None:
+    def magnet_rate(self, rate: int = MAGNET_30HZ) -> None:
         if self.mode in [0x08, 0x09, 0x0A, 0x0B, 0x0C]:
             raise RuntimeError("Mode must not be a fusion mode")
         self._write_register(_PAGE_REGISTER, 0x01)
@@ -642,7 +643,7 @@ class BNO055:  # pylint: disable=too-many-public-methods
         return 0b00011000 & value
 
     @magnet_operation_mode.setter
-    def magnet_operation_mode(self, mode: int = MAGNET_REGULAR_MODE) -> None:
+    def magnet_operation_mode(self, mode: int = MAGNET_ACCURACY_MODE) -> None:
         if self.mode in [0x08, 0x09, 0x0A, 0x0B, 0x0C]:
             raise RuntimeError("Mode must not be a fusion mode")
         self._write_register(_PAGE_REGISTER, 0x01)
