@@ -224,15 +224,15 @@ class BNO055:  # pylint: disable=too-many-public-methods
 
         import Adafruit_GPIO as GPIO
         GPIO.get_platform_gpio().setup(18, GPIO.OUT)
-        GPIO.set_high(18)
+        GPIO.get_platform_gpio.set_high(18)
         chip_id = self._read_register(_ID_REGISTER)
         print(chip_id)
         print(_CHIP_ID)
         if chip_id != _CHIP_ID:
             raise RuntimeError(f"bad chip id ({chip_id:#x} != {_CHIP_ID:#x})")
-        GPIO.set_low(18)
+        GPIO.get_platform_gpio().set_low(18)
         time.sleep(0.01)  # 10ms
-        GPIO.set_high(18)
+        GPIO.get_platform_gpio().set_high(18)
         self._reset()
         self.set_normal_mode()
         self._write_register(_PAGE_REGISTER, 0x00)
