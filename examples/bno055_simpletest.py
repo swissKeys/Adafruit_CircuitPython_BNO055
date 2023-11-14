@@ -72,14 +72,14 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
             print('See datasheet section 4.3.59 for the meaning.') """
 
     # Print BNO055 software revision and other diagnostic data.
-    sw, bl, accel, mag, gyro = sensor.get_revision()
+    sw, bl, accel, mag, gyro = sensor.get_revision
     print('Software version:   {0}'.format(sw))
     print('Bootloader version: {0}'.format(bl))
     print('Accelerometer ID:   0x{0:02X}'.format(accel))
     print('Magnetometer ID:    0x{0:02X}'.format(mag))
     print('Gyroscope ID:       0x{0:02X}\n'.format(gyro))
 
-    system, gyro, accel, mag = sensor.get_calibration_status()
+    system, gyro, accel, mag = sensor.get_calibration_status
 
     print(system)
     print(gyro)
