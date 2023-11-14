@@ -191,34 +191,6 @@ class _ModeStruct(Struct):  # pylint: disable=too-few-public-methods
 
 
 class BNO055:  # pylint: disable=too-many-public-methods
-    """
-    Base class for the BNO055 9DOF IMU sensor.
-
-    **Quickstart: Importing and using the device**
-
-        Here is an example of using the :class:`BNO055` class.
-        First you will need to import the libraries to use the sensor
-
-        .. code-block:: python
-
-            import board
-            import adafruit_bno055
-
-        Once this is done you can define your `board.I2C` object and define your sensor object
-
-        .. code-block:: python
-
-            i2c = board.I2C()  # uses board.SCL and board.SDA
-            sensor = adafruit_bno055.BNO055_I2C(i2c)
-
-
-        Now you have access to the :attr:`acceleration` attribute among others
-
-        .. code-block:: python
-
-            sensor = accelerometer.acceleration
-
-    """
 
     def __init__(self, rst_pin=None, gpio=None ) -> None:
         self._rst_pin = rst_pin
@@ -240,6 +212,7 @@ class BNO055:  # pylint: disable=too-many-public-methods
         time.sleep(0.01)
 
     def _reset(self) -> None:
+        self.mode = CONFIG_MODE
         print(self._rst_pin)
         """Resets the sensor to default settings."""
 
