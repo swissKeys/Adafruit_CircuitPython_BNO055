@@ -220,7 +220,8 @@ class BNO055:  # pylint: disable=too-many-public-methods
 
     """
 
-    def __init__(self) -> None:
+    def __init__(self, rst_pin=None) -> None:
+        self._rst_pin = rst_pin
         chip_id = self._read_register(_ID_REGISTER)
         print(chip_id)
         print(_CHIP_ID)
@@ -238,6 +239,7 @@ class BNO055:  # pylint: disable=too-many-public-methods
         time.sleep(0.01)
 
     def _reset(self) -> None:
+        print(self._rst_pin)
         """Resets the sensor to default settings."""
         self.mode = CONFIG_MODE
         try:
