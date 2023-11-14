@@ -663,12 +663,16 @@ class BNO055:  # pylint: disable=too-many-public-methods
         return 0b01100000 & value
 
     @magnet_mode.setter
-    def magnet_mode(self, mode: int = MAGNET_FORCEMODE_MODE) -> None:
+    def magnet_mode(self, mode: int = MAGNET_ACCURACY_MODE) -> None:
+        print(f"MAGNET_ACCURACY_MODE: {mode}")
         if self.mode in [0x08, 0x09, 0x0A, 0x0B, 0x0C]:
             raise RuntimeError("Mode must not be a fusion mode")
         self._write_register(_PAGE_REGISTER, 0x01)
         value = self._read_register(_MAGNET_CONFIG_REGISTER)
+        print(f"_MAGNET_CONFIG_REGISTER: {value}")
         masked_value = 0b00011111 & value
+        print(f"masked: {masked_value}")
+        print(f"updating the lower 5 bits of the magnetometer : {masked_value | mode}")
         self._write_register(_MAGNET_CONFIG_REGISTER, masked_value | mode)
         self._write_register(_PAGE_REGISTER, 0x00)
 
