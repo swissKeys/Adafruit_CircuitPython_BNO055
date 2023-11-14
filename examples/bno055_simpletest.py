@@ -19,7 +19,7 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
 
     # Open the CSV file in write mode (use 'a' for append mode if the file already exists)
 
-    CALIBRATION_FILE = 'webgl_demo/calibration.json'
+    CALIBRATION_FILE = 'webgl_demo/'
 
     def average_num_in_time(frequency):
 
@@ -86,18 +86,18 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     print(accel)
     print(mag)
 
-    bno_changed = threading.Condition()
-    
-    with open(CALIBRATION_FILE, 'r') as cal_file:
-        data = json.load(cal_file)
-    # Grab the lock on BNO sensor access to serial access to the sensor.
-    with bno_changed:
-        sensor.set_calibration(data)
+    """     bno_changed = threading.Condition()
+        
+        with open(CALIBRATION_FILE, 'r') as cal_file:
+            data = json.load(cal_file)
+        # Grab the lock on BNO sensor access to serial access to the sensor.
+        with bno_changed:
+            sensor.set_calibration(data) """
 
     print('Loading calib')
 
 
-    system, gyro, accel, mag = sensor.calibration_status()
+    system, gyro, accel, mag = sensor.calibration_status
     
 
     """     while mag != 3:
