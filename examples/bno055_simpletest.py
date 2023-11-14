@@ -31,7 +31,7 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
 
         for _ in range(frequency):
             
-            mag_x, mag_y, mag_z = sensor.read_magnetometer()
+            mag_x, mag_y, mag_z = sensor._magnetic
             total_x += mag_x
             array_x.append(mag_x)
             total_y += mag_y
@@ -118,7 +118,7 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
         input()
 
         mag_x,mag_y,mag_z, array_x, array_y, array_z = average_num_in_time(30)
-        #mag_x,mag_y,mag_z = sensor.read_magnetometer()
+        #mag_x,mag_y,mag_z = sensor._magnetic
 
         print('mag_x={0} mag_y={1} mag_z={2}'.format(round(mag_x, 4), round(mag_y, 4), round(mag_z, 4)))
         
