@@ -220,8 +220,9 @@ class BNO055:  # pylint: disable=too-many-public-methods
 
     """
 
-    def __init__(self, rst_pin=None) -> None:
+    def __init__(self, rst_pin=None, gpio=None ) -> None:
         self._rst_pin = rst_pin
+        self._gpio = gpio
         chip_id = self._read_register(_ID_REGISTER)
         print(chip_id)
         print(_CHIP_ID)
@@ -828,12 +829,13 @@ class BNO055_UART(BNO055):
     Driver for the BNO055 9DOF IMU sensor via UART.
     """
 
-    def __init__(self, uart: UART, rst_pin=None) -> None:
+    def __init__(self, uart: UART, rst_pin=None, gpio=None) -> None:
         self._uart = uart
         self._rst_pin = rst_pin  # Pass the rst_pin argument to the instance
+        self._gpio = gpio
 
         print(self._uart.baudrate)
-        super().__init__(rst_pin=rst_pin)
+        super().__init__(rst_pin=rst_pin, gpio=gpio)
 
     def _write_register(  # pylint: disable=arguments-differ,arguments-renamed
         self, register: int, data: int
