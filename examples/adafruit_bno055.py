@@ -852,7 +852,7 @@ class BNO055_UART(BNO055):
                  raise RuntimeError('Register read error: 0x{0}'.format(binascii.hexlify(resp)))
             # Read the returned bytes.
             length = resp[1]
-            resp = bytearray(self._serial.read(length))
+            resp = bytearray(self._uart.read(length))
             if resp is None or len(resp) != length:
                 raise RuntimeError('Timeout waiting to read data, is the BNO055 connected?')
             return resp
