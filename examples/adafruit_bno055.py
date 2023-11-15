@@ -45,7 +45,7 @@ except ImportError:
 __version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_BNO055.git"
 
-_CHIP_ID = const(0xA0)
+_CHIP_ID = const(0x00)
 
 CONFIG_MODE = const(0x00)
 ACCONLY_MODE = const(0x01)
