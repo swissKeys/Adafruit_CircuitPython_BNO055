@@ -30,6 +30,7 @@ inertial measurement unit module with sensor fusion.
 """
 import time
 import struct
+import binascii
 
 from micropython import const
 from adafruit_bus_device.i2c_device import I2CDevice
@@ -839,20 +840,22 @@ class BNO055_UART(BNO055):
         self, register: int, length: int = 1
     ) -> int:
         
-        i = 0
-        while i < 3:
-            command = bytearray([0xAA, 0x01, register, length])
+        # Build and send serial register read command.
+            command = bytearray(4)
+            command[0] = 0xAA  # Start byte
+            command[1] = 0x01  # Read
+            command[2] = address & 0xFF
+            command[3] = length & 0xFF
             resp = self._serial_send(command)
-            if len(resp) >= 2 and resp[0] == 0xBB:
-                break
-            i += 1
-        if len(resp) < 2:
-            raise OSError("UART access error.")
-        if resp[0] != 0xBB:
-            raise RuntimeError(f"UART read error: {resp[1]}")
-        if length > 1:
-            return resp[2:]
-        return int(resp[2])
+            # Verify register read succeeded.
+            if resp[0] != 0xBB:
+                 raise RuntimeError('Register read error: 0x{0}'.format(binascii.hexlify(resp)))
+            # Read the returned bytes.
+            length = resp[1]
+            resp = bytearray(self._serial.read(length))
+            if resp is None or len(resp) != length:
+                raise RuntimeError('Timeout waiting to read data, is the BNO055 connected?')
+            return resp
 
     
     def _serial_send(self, command, ack=True, max_attempts=5):
