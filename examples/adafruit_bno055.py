@@ -835,8 +835,8 @@ class BNO055_UART(BNO055):
         self, register: int, length: int = 1
     ) -> int:
         i = 0
-        self._uart.flushInput()
         while i < 3:
+            self._uart.flushInput()
             self._uart.write(bytes([0xAA, 0x01, register, length]))
             now = time.monotonic()
             while self._uart.in_waiting < length + 2 and time.monotonic() - now < 0.1:
