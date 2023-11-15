@@ -821,7 +821,7 @@ class BNO055_UART(BNO055):
         ack=True
         if not isinstance(data, bytes):
             data = bytes([data])
-                    # UART write.
+            print("write")
             command = bytearray(4 + len(data))
             command[0] = 0xAA  # Start byte
             command[1] = 0x00  # Write
