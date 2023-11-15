@@ -871,7 +871,7 @@ class BNO055_UART(BNO055):
             if not ack:
                 return
             # Read acknowledgement response (2 bytes).
-            resp = bytearray(self._serial.read(2))
+            resp = bytearray(self._uart.read(2))
             if resp is None or len(resp) != 2:
                 raise RuntimeError('Timeout waiting for serial acknowledge, is the BNO055 connected?')
             # Stop if there's no bus error (0xEE07 response) and return response bytes.
