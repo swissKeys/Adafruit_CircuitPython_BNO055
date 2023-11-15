@@ -209,7 +209,7 @@ class BNO055:  # pylint: disable=too-many-public-methods
         self.gyro_range = GYRO_2000_DPS
         self.magnet_rate = MAGNET_30HZ
         time.sleep(0.01)
-        self.mode = MAGONLY_MODE
+        self.mode = NDOF_MODE
         time.sleep(0.01)
 
     def _reset(self) -> None:
@@ -834,27 +834,24 @@ class BNO055_UART(BNO055):
     def _read_register(  # pylint: disable=arguments-differ
         self, register: int, length: int = 1
     ) -> int:
-        i = 0
-        while i < 3:
-            self._uart.flushInput()
-            self._uart.write(bytes([0xAA, 0x01, register, length]))
-            now = time.monotonic()
-            while self._uart.in_waiting < length + 2 and time.monotonic() - now < 0.1:
-                pass
-            print(self._uart.in_waiting)
-            resp = self._uart.read(self._uart.in_waiting)
-            if len(resp) >= 2 and resp[0] == 0xBB:
-                break
-            i += 1
-        if len(resp) < 2:
-            raise OSError("UART access error.")
-        if resp[0] != 0xBB:
-            raise RuntimeError(f"UART read error: {resp[1]}")
-        if length > 1:
-            return resp[2:]
-        return int(resp[2])
-        
+            # Build and send serial register read command.
 
+            command = bytearray(4)
+            command[0] = 0xAA  # Start byte
+            command[1] = 0x01  # Read
+            command[2] = register & 0xFF
+            command[3] = length & 0xFF
+            resp = self._serial_send(command)
+            # Verify register read succeeded.
+            print(resp)
+            print(len(resp))
+            if len(resp) < 2:
+                raise OSError("UART access error.")
+            if resp[0] != 0xBB:
+                raise RuntimeError(f"UART read error: {resp[1]}")
+            if length > 1:
+                return resp[2:]
+            return int(resp[2])
     
     def _serial_send(self, command, ack=True, max_attempts=5):
     # Send a serial command and automatically handle if it needs to be resent
