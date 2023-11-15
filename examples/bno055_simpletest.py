@@ -57,7 +57,8 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     # below 'sensor = ...' lines is uncommented:
     # Raspberry Pi configuration with serial UART and RST connected to GPIO 18:
     # Define the serial connection
-    uart = serial.Serial('/dev/serial0', 115200)
+    uart = serial.Serial('/dev/serial0', 115200, timeout=5,
+                                         writeTimeout=5)
 
     # Create an instance of the BNO055 sensor using UART
     sensor = adafruit_bno055.BNO055_UART(uart, rst_pin=18)
