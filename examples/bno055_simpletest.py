@@ -98,13 +98,14 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
 
 
     system, gyro, accel, mag = sensor.calibration_status
-    
 
-    """     while mag != 3:
-            with bno_changed:
-                system, gyro, accel, mag = sensor.calibration_status()
-                print(system, gyro, accel, mag)
-            time.sleep(1.0/10) """
+    bno_changed = threading.Condition()
+
+    while mag != 3:
+        with bno_changed:
+            system, gyro, accel, mag = sensor.calibration_status
+            print(system, gyro, accel, mag)
+        time.sleep(1.0/10)
 
     print(system, gyro, accel, mag)
 
