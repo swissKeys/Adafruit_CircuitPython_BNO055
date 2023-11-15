@@ -844,7 +844,7 @@ class BNO055_UART(BNO055):
             command = bytearray(4)
             command[0] = 0xAA  # Start byte
             command[1] = 0x01  # Read
-            command[2] = address & 0xFF
+            command[2] = register & 0xFF
             command[3] = length & 0xFF
             resp = self._serial_send(command)
             # Verify register read succeeded.
