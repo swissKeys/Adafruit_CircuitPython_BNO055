@@ -44,7 +44,7 @@ except ImportError:
 __version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_BNO055.git"
 
-_CHIP_ID = const(0xA0)
+_CHIP_ID = const(0x00)
 
 CONFIG_MODE = const(0x00)
 ACCONLY_MODE = const(0x01)
@@ -850,6 +850,38 @@ class BNO055_UART(BNO055):
             return resp[2:]
         return int(resp[2])
 
+    
+    def _serial_send(self, command, ack=True, max_attempts=5):
+    # Send a serial command and automatically handle if it needs to be resent
+    # because of a bus error.  If ack is True then an ackowledgement is
+    # expected and only up to the maximum specified attempts will be made
+    # to get a good acknowledgement (default is 5).  If ack is False then
+    # no acknowledgement is expected (like when resetting the device).
+        attempts = 0
+        while True:
+            # Flush any pending received data to get into a clean state.
+            self._serial.flushInput()
+            # Send the data.
+            self._serial.write(command)
+            # Stop if no acknowledgment is expected.
+            if not ack:
+                return
+            # Read acknowledgement response (2 bytes).
+            resp = bytearray(self._serial.read(2))
+            if resp is None or len(resp) != 2:
+                raise RuntimeError('Timeout waiting for serial acknowledge, is the BNO055 connected?')
+            # Stop if there's no bus error (0xEE07 response) and return response bytes.
+            if not (resp[0] == 0xEE and resp[1] == 0x07):
+                return resp
+            # Else there was a bus error so resend, as recommended in UART app
+            # note at:
+            #   http://ae-bst.resource.bosch.com/media/products/dokumente/bno055/BST-BNO055-AN012-00.pdf
+            attempts += 1
+            if attempts >=  max_attempts:
+                raise RuntimeError('Exceeded maximum attempts to acknowledge serial command without bus error!')
+        
+    
+    
     @property
     def _temperature(self) -> int:
         return self._read_register(0x34)
