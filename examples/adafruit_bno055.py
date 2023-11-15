@@ -209,7 +209,7 @@ class BNO055:  # pylint: disable=too-many-public-methods
         self.gyro_range = GYRO_2000_DPS
         self.magnet_rate = MAGNET_30HZ
         time.sleep(0.01)
-        self.mode = NDOF_MODE
+        self.mode = MAGONLY_MODE
         time.sleep(0.01)
 
     def _reset(self) -> None:
