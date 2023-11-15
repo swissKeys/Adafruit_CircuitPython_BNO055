@@ -877,9 +877,11 @@ class BNO055_UART(BNO055):
             self._uart.write(command)
             # Stop if no acknowledgment is expected.
             if not ack:
+                print(attempts)
                 return
             # Read acknowledgement response (2 bytes).
             resp = bytearray(self._uart.read(2))
+            print("reading")
             if resp is None or len(resp) != 2:
                 raise RuntimeError('Timeout waiting for serial acknowledge, is the BNO055 connected?')
             # Stop if there's no bus error (0xEE07 response) and return response bytes.
@@ -889,6 +891,7 @@ class BNO055_UART(BNO055):
             # note at:
             #   http://ae-bst.resource.bosch.com/media/products/dokumente/bno055/BST-BNO055-AN012-00.pdf
             attempts += 1
+            print("at the end")
             if attempts >=  max_attempts:
                 raise RuntimeError('Exceeded maximum attempts to acknowledge serial command without bus error!')
         
