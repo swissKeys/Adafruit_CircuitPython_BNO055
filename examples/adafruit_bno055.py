@@ -831,7 +831,7 @@ class BNO055_UART(BNO055):
             
             # Send the UART command with automatic acknowledgment handling.
             resp = self._serial_send(command, ack=ack)
-            
+            print("after serial send")
             # Verify register write succeeded if there was an acknowledgement.
             if ack and (resp[0] != 0xEE or resp[1] != 0x01):
                 raise RuntimeError(f"UART write error: {resp[1]}")
@@ -870,6 +870,7 @@ class BNO055_UART(BNO055):
     # no acknowledgement is expected (like when resetting the device).
         attempts = 0
         while True:
+            print(attempts)
             # Flush any pending received data to get into a clean state.
             self._uart.flushInput()
             # Send the data.
