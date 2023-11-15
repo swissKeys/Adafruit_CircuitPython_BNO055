@@ -38,7 +38,7 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
             array_y.append(mag_y)
             total_z += mag_z
             array_z.append(mag_z)
-            time.sleep(1.0 / frequency)
+            time.sleep(1.5 / frequency)
 
         avg_x = total_x / frequency
         avg_y = total_y / frequency
@@ -63,56 +63,14 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     # Create an instance of the BNO055 sensor using UART
     sensor = adafruit_bno055.BNO055_UART(uart, rst_pin=18)
 
-    """     # Print system status and self test result.
-        status, self_test, error = sensor.get_system_status()
-        print('System status: {0}'.format(status))
-        print('Self test result (0x0F is normal): 0x{0:02X}'.format(self_test))
-        # Print out an error if system status is in error mode.
-        if status == 0x01:
-            print('System error: {0}'.format(error))
-            print('See datasheet section 4.3.59 for the meaning.') """
-    """ 
-        # Print BNO055 software revision and other diagnostic data.
-        sw, bl, accel, mag, gyro = sensor.get_revision
-        print('Software version:   {0}'.format(sw))
-        print('Bootloader version: {0}'.format(bl))
-        print('Accelerometer ID:   0x{0:02X}'.format(accel))
-        print('Magnetometer ID:    0x{0:02X}'.format(mag))
-        print('Gyroscope ID:       0x{0:02X}\n'.format(gyro)) """
 
     system, gyro, accel, mag = sensor.calibration_status
-
-    print(system)
-    print(gyro)
-    print(accel)
-    print(mag)
-
-    """     bno_changed = threading.Condition()
-        
-        with open(CALIBRATION_FILE, 'r') as cal_file:
-            data = json.load(cal_file)
-        # Grab the lock on BNO sensor access to serial access to the sensor.
-        with bno_changed:
-            sensor.set_calibration(data) """
-
-    print('Loading calib')
-
-
-    system, gyro, accel, mag = sensor.calibration_status
-
-    bno_changed = threading.Condition()
-
-    """     while mag != 3:
-            with bno_changed:
-                system, gyro, accel, mag = sensor.calibration_status
-                print(system, gyro, accel, mag)
-            time.sleep(1.0/10) """
 
     print(system, gyro, accel, mag)
 
     magneto_data_array = []
     detailed_data = []
-    centimeter = 65
+    centimeter = 80
 
     for i in range(number_of_datapoints):
         print(f"Press Enter to collect Point number { i+1 } on {centimeter} cm:")
@@ -146,9 +104,9 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     current_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
     if checking_data == False:
-        json_file = f"collection_start_65_end_{centimeter}_mitte_{measured_axis}_{current_datetime}.json"
+        json_file = f"collection_start_80_end_{centimeter}_mitte_{measured_axis}_{current_datetime}.json"
     else:
-        json_file = f"checking_start_65_end_{centimeter}_mitte_{measured_axis}_{current_datetime}.json"
+        json_file = f"checking_start_80_end_{centimeter}_mitte_{measured_axis}_{current_datetime}.json"
         
 
     data_dict = {
@@ -239,7 +197,7 @@ def main():
     parser.add_argument('--distance_coils', type=float, required=False, default=0.456, help='Distance between coils in m')
     parser.add_argument('--number_turns', type=float, required=False, default=20.0, help='Number of turns in the coil')
     parser.add_argument('--measured_axis', type=str, required=False, default='z', help='Axis along which measurements are taken')
-    parser.add_argument('--number_of_datapoints', type=str, required=False, default=5, help='Number of data points to be collected')
+    parser.add_argument('--number_of_datapoints', type=str, required=False, default=61, help='Number of data points to be collected')
     args = parser.parse_args()
 
     # Enable verbose debug logging if -v is passed as a parameter.
