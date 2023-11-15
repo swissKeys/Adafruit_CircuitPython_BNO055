@@ -840,22 +840,26 @@ class BNO055_UART(BNO055):
         self, register: int, length: int = 1
     ) -> int:
         
-        # Build and send serial register read command.
+            # Build and send serial register read command.
             command = bytearray(4)
             command[0] = 0xAA  # Start byte
             command[1] = 0x01  # Read
             command[2] = register & 0xFF
             command[3] = length & 0xFF
             resp = self._serial_send(command)
+            
             # Verify register read succeeded.
             if resp[0] != 0xBB:
-                 raise RuntimeError('Register read error: 0x{0}'.format(binascii.hexlify(resp)))
+                raise RuntimeError('Register read error: 0x{0}'.format(binascii.hexlify(bytearray([resp[0]]))))
+
             # Read the returned bytes.
-            length = resp[1]
-            resp = bytearray(self._uart.read(length))
-            if resp is None or len(resp) != length:
+            response_length = resp[1]
+            resp_data = self._uart.read(response_length)
+            
+            if resp_data is None or len(resp_data) != response_length:
                 raise RuntimeError('Timeout waiting to read data, is the BNO055 connected?')
-            return resp
+
+            return int.from_bytes(resp_data, byteorder='big')
 
     
     def _serial_send(self, command, ack=True, max_attempts=5):
