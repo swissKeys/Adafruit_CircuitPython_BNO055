@@ -842,7 +842,6 @@ class BNO055_UART(BNO055):
             command[2] = register & 0xFF
             command[3] = length & 0xFF
             resp = self._serial_send(command)
-            print("read")
             # Verify register read succeeded.
             if resp[0] != 0xBB:
                 raise RuntimeError('Register read error: 0x{0}'.format(binascii.hexlify(bytearray([resp[0]]))))
@@ -855,7 +854,6 @@ class BNO055_UART(BNO055):
                 raise RuntimeError('Timeout waiting to read data, is the BNO055 connected?')
 
             return int.from_bytes(resp_data, byteorder='big')
-
     
     def _serial_send(self, command, ack=True, max_attempts=5):
     # Send a serial command and automatically handle if it needs to be resent
@@ -876,7 +874,6 @@ class BNO055_UART(BNO055):
                 return
             # Read acknowledgement response (2 bytes).
             resp = bytearray(self._uart.read(2))
-            print("reading")
             if resp is None or len(resp) != 2:
                 raise RuntimeError('Timeout waiting for serial acknowledge, is the BNO055 connected?')
             # Stop if there's no bus error (0xEE07 response) and return response bytes.
@@ -886,7 +883,6 @@ class BNO055_UART(BNO055):
             # note at:
             #   http://ae-bst.resource.bosch.com/media/products/dokumente/bno055/BST-BNO055-AN012-00.pdf
             attempts += 1
-            print("at the end")
             if attempts >=  max_attempts:
                 raise RuntimeError('Exceeded maximum attempts to acknowledge serial command without bus error!')
         
