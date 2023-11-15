@@ -847,7 +847,7 @@ class BNO055_UART(BNO055):
             command[2] = register & 0xFF
             command[3] = length & 0xFF
             resp = self._serial_send(command)
-            
+            print("read")
             # Verify register read succeeded.
             if resp[0] != 0xBB:
                 raise RuntimeError('Register read error: 0x{0}'.format(binascii.hexlify(bytearray([resp[0]]))))
