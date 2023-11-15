@@ -842,7 +842,7 @@ class BNO055_UART(BNO055):
             while self._uart.in_waiting < length + 2 and time.monotonic() - now < 0.1:
                 pass
             print(self._uart.in_waiting)
-            resp = self._uart.read(self._uart.in_waiting)
+            resp = self._uart.read(2)
             if len(resp) >= 2 and resp[0] == 0xBB:
                 break
             i += 1
