@@ -838,7 +838,9 @@ class BNO055_UART(BNO055):
         while i < 3:
             self._uart.write(bytes([0xAA, 0x01, register, length]))
             now = time.monotonic()
+            print('in loop', self._uart.in_waiting)
             while self._uart.in_waiting < length + 2 and time.monotonic() - now < 0.1:
+                print('while in waiting smaller one:', self._uart.in_waiting)
                 pass
             resp = self._uart.read(self._uart.in_waiting)
             if len(resp) >= 2 and resp[0] == 0xBB:
